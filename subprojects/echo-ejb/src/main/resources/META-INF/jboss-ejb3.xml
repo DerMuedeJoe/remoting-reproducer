@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jboss:ejb-jar xmlns:jboss="http://www.jboss.com/xml/ns/javaee"
+               xmlns:jee="http://java.sun.com/xml/ns/javaee"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xmlns:s="urn:security:1.1"
+               xmlns:ci="urn:container-interceptors:1.0"
+               xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://www.jboss.org/j2ee/schema/jboss-ejb3-spec-2_0.xsd
+http://www.jboss.com/xml/ns/javaee http://www.jboss.org/j2ee/schema/jboss-ejb3-2_0.xsd
+urn:container-interceptors:1.0 https://raw.githubusercontent.com/wildfly/wildfly/master/ejb3/src/main/resources/schema/jboss-ejb-container-interceptors_1_0.xsd
+urn:security:1.1 https://raw.githubusercontent.com/wildfly/wildfly/master/security/subsystem/src/main/resources/schema/jboss-as-security_1_1.xsd"
+               version="3.1"
+               impl-version="2.0">
+
+    <jee:assembly-descriptor>
+        <jee:method-permission>
+            <jee:description>All access to all EJBs is allowed (like it was previously).</jee:description>
+            <jee:unchecked/>
+            <jee:method>
+                <jee:ejb-name>*</jee:ejb-name>
+                <jee:method-name>*</jee:method-name>
+            </jee:method>
+        </jee:method-permission>
+    </jee:assembly-descriptor>
+</jboss:ejb-jar>

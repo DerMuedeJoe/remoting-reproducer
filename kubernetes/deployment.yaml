@@ -1,0 +1,87 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jboss-server
+  labels:
+    app: jboss-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jboss-server
+  template:
+    metadata:
+      labels:
+        app: jboss-server
+    spec:
+      containers:
+        - name: jboss-server
+          image: test/jboss-server:1.0.0
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+      imagePullSecrets:
+        - name: docker-test-pull-secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jboss-service
+spec:
+  selector:
+    app: jboss-server
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spring-server
+  labels:
+    app: spring-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: spring-server
+  template:
+    metadata:
+      labels:
+        app: spring-server
+    spec:
+      containers:
+        - name: spring-server
+          image: test/spring-server:1.0.0
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+      imagePullSecrets:
+        - name: docker-test-pull-secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: spring-service
+spec:
+  selector:
+    app: spring-server
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+---
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: allow-from-same-namespace
+spec:
+  ingress:
+    - from:
+        - podSelector: {}
+  # The grouping of pods to which the policy applies.
+  # An empty podSelector selects all pods in the namespace.
+  podSelector: {}
+  policyTypes:
+    - Ingress
